@@ -1,0 +1,212 @@
+:root {
+    --primary: #4361ee;
+    --primary-hover: #3a0ca3;
+    --bg-dark: #0f172a;
+    --bg-card: #1e293b;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --accent: #f72585;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    line-height: 1.6;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 5%;
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.logo span {
+    color: var(--primary);
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+nav a {
+    color: var(--text-main);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+nav a:hover {
+    color: var(--primary);
+}
+
+.hero {
+    text-align: center;
+    padding: 100px 20px;
+    background: radial-gradient(circle at top, #1e293b 0%, #0f172a 100%);
+}
+
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    background: linear-gradient(90deg, #4361ee, #4cc9f0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    max-width: 600px;
+    margin: 0 auto 40px auto;
+}
+
+.cta-button {
+    display: inline-block;
+    padding: 15px 30px;
+    background-color: var(--primary);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 30px;
+    font-weight: 600;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    box-shadow: 0 4px 15px rgba(67, 97, 238, 0.4);
+}
+
+.cta-button:hover {
+    transform: translateY(-3px);
+    background-color: var(--primary-hover);
+}
+
+.plans {
+    padding: 80px 5%;
+    text-align: center;
+}
+
+.plans h2 {
+    font-size: 2.5rem;
+    margin-bottom: 50px;
+}
+
+.pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.plan-card {
+    background: var(--bg-card);
+    padding: 40px 20px;
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.plan-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    border-color: rgba(67, 97, 238, 0.3);
+}
+
+.plan-card.featured {
+    border-color: var(--primary);
+    transform: scale(1.05);
+}
+
+.plan-card.featured:hover {
+    transform: scale(1.05) translateY(-10px);
+}
+
+.badge {
+    position: absolute;
+    top: 15px;
+    right: -35px;
+    background: var(--accent);
+    color: #fff;
+    padding: 5px 40px;
+    transform: rotate(45deg);
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.plan-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+}
+
+.price {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: var(--primary);
+}
+
+.price span {
+    font-size: 1rem;
+    color: var(--text-muted);
+}
+
+.plan-card ul {
+    list-style: none;
+    margin-bottom: 30px;
+    color: var(--text-muted);
+}
+
+.plan-card ul li {
+    margin-bottom: 10px;
+}
+
+.buy-btn {
+    width: 100%;
+    padding: 12px;
+    background: transparent;
+    border: 2px solid var(--primary);
+    color: #fff;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.buy-btn:hover {
+    background: var(--primary);
+}
+
+.featured .buy-btn {
+    background: var(--primary);
+}
+
+.featured .buy-btn:hover {
+    background: var(--primary-hover);
+    border-color: var(--primary-hover);
+}
+
+footer {
+    text-align: center;
+    padding: 30px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-muted);
+}
