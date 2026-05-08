@@ -1,4 +1,4 @@
-```yaml id="f69k77"
+
 name: Deploy to Armbian
 
 on:
@@ -23,4 +23,3 @@ jobs:
             git pull
             npm install
             pm2 restart all
-```
