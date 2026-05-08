@@ -1,0 +1,26 @@
+```yaml id="f69k77"
+name: Deploy to Armbian
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: SSH Deploy
+        uses: appleboy/ssh-action@v1.0.3
+
+        with:
+          host: 192.168.2.182
+          username: root
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            cd /srv/shopdemo
+            git pull
+            npm install
+            pm2 restart all
+```
