@@ -25,25 +25,40 @@ jobs:
           username: root
           password: ${{ secrets.DEMOCIDI }}
           port: 22
+
+          debug: true
+          script_stop: true
+          request_pty: true
+
           script: |
+            set -e
+
             export PATH=$PATH:/usr/bin:/usr/local/bin
 
             cd /srv/shopdemo
 
-            echo "===== PULL CODE ====="
+            echo "===== CURRENT DIR ====="
+            pwd
+
+            echo "===== GIT PULL ====="
             git reset --hard
             git pull origin master
+
+            echo "===== NODE VERSION ====="
+            node -v
+            npm -v
 
             echo "===== INSTALL ====="
             npm install
 
-            echo "===== RESTART APP ====="
+            echo "===== PM2 RESTART ====="
             pm2 restart shopdemo || pm2 start server.js --name shopdemo
 
+            echo "===== PM2 SAVE ====="
             pm2 save
 
             echo "===== PM2 STATUS ====="
             pm2 status
 
             echo "===== CURRENT COMMIT ====="
-            git log --oneline -5
+            git log --oneline -1
