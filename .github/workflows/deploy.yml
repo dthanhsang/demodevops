@@ -26,9 +26,19 @@ jobs:
           password: ${{ secrets.DEMOCIDI }}
           port: 22
           script: |
+            export PATH=$PATH:/usr/bin:/usr/local/bin
+
             cd /srv/shopdemo
-            git pull
+
+            git reset --hard
+            git pull origin master
+
             npm install
-            pm2 delete all
-            pm2 start "python3 -m http.server 3000 --directory public" --name shopdemo
+
+            pm2 delete shopdemo || true
+
+            pm2 start server.js --name shopdemo
+
             pm2 save
+
+            pm2 status
