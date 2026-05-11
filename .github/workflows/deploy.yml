@@ -28,7 +28,7 @@ jobs:
           script: |
             cd /srv/shopdemo
             git pull
-            
+            npm install
             pm2 delete all
             pm2 start "python3 -m http.server 3000 --directory public" --name shopdemo
             pm2 save
