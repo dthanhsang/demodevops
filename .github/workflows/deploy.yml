@@ -13,7 +13,7 @@ jobs:
       - name: Connect Tailscale
         uses: tailscale/github-action@v1
         with:
-          authkey: ${{ secrets.TS_AUTHKEY }}
+          authkey: ${{ secrets.VPN_KETNOISSH }}
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
