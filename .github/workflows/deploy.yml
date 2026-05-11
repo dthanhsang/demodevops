@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Connect Tailscale
-        uses: tailscale/github-action@v2
+        uses: tailscale/github-action@v1
         with:
           authkey: ${{ secrets.TS_AUTHKEY }}
 
