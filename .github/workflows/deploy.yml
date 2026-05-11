@@ -11,16 +11,16 @@ jobs:
 
     steps:
       - name: Connect Tailscale
-        uses: tailscale/github-action@v2
+        uses: tailscale/github-action@v1
         with:
-          authkey: ${{ secrets.TS_AUTHKEY }}
+          authkey: ${{ secrets.VPN_KETNOISSH }}
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: 100.93.83.43
           username: root
-          password: ${{ secrets.SERVER_PASSWORD }}
+          password: ${{ secrets.DEMOCIDI }}
           port: 22
           script: |
             cd /srv/shopdemo
