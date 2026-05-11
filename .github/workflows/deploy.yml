@@ -30,13 +30,15 @@ jobs:
           script: |
             set -e
 
+            export GIT_SSH_COMMAND="ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no"
+
             export PATH=$PATH:/usr/bin:/usr/local/bin
 
             cd /srv/shopdemo
 
-        
-            git pull origin master
+            git fetch origin
 
+            git reset --hard origin/master
 
             npm install
 
