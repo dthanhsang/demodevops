@@ -20,7 +20,7 @@ jobs:
         with:
           host: 100.93.83.43
           username: root
-          password: ${{ secrets.SERVER_PASSWORD }}
+          password: ${{ secrets.DEMOCIDI }}
           port: 22
           script: |
             cd /srv/shopdemo
