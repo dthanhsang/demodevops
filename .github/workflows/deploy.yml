@@ -35,7 +35,7 @@ jobs:
             export PATH=$PATH:/usr/bin:/usr/local/bin
 
             cd /srv/shopdemo
-
+            echo "deploy $(date)" > deploy-test.txt
             git fetch origin
 
             git reset --hard origin/master
