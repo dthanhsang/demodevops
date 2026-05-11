@@ -18,27 +18,30 @@ jobs:
         with:
           authkey: ${{ secrets.VPN_KETNOISSH }}
 
-      - name: Deploy to VPS
+      - name: Copy project to VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: 100.93.83.43
+          username: root
+          password: ${{ secrets.DEMOCIDI }}
+          port: 22
+          source: "."
+          target: "/srv/shopdemo"
+
+      - name: Restart app
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: 100.93.83.43
           username: root
           password: ${{ secrets.DEMOCIDI }}
           port: 22
-          request_pty: true
 
           script: |
             set -e
 
-            export GIT_SSH_COMMAND="ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no"
-
             export PATH=$PATH:/usr/bin:/usr/local/bin
 
             cd /srv/shopdemo
-            echo "deploy $(date)" > deploy-test.txt
-            git fetch origin
-
-            git reset --hard origin/master
 
             npm install
 
