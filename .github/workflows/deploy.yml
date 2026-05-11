@@ -1,5 +1,4 @@
-
-name: Deploy to Armbian
+name: Deploy
 
 on:
   push:
@@ -11,13 +10,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: SSH Deploy
-        uses: appleboy/ssh-action@v1.0.3
-
+      - name: Connect Tailscale
+        uses: tailscale/github-action@v2
         with:
-          host: 192.168.2.182
+          authkey: ${{ secrets.TS_AUTHKEY }}
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: 100.93.83.43
           username: root
-          key: ${{ secrets.SERVER_SSH_KEY }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          port: 22
           script: |
             cd /srv/shopdemo
             git pull
