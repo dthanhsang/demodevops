@@ -10,25 +10,40 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - uses: tailscale/github-action@v2
+      - name: Connect Tailscale
+        uses: tailscale/github-action@v2
         with:
           authkey: ${{ secrets.VPN_KETNOISSH }}
 
-      - uses: appleboy/ssh-action@v1.0.3
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: 100.93.83.43
           username: root
           password: ${{ secrets.DEMOCIDI }}
           port: 22
           script: |
+            export PATH=$PATH:/usr/bin:/usr/local/bin
+
             cd /srv/shopdemo
 
+            echo "===== PULL CODE ====="
+            git reset --hard
             git pull origin master
 
+            echo "===== INSTALL ====="
             npm install
 
+            echo "===== RESTART APP ====="
             pm2 restart shopdemo || pm2 start server.js --name shopdemo
 
             pm2 save
+
+            echo "===== PM2 STATUS ====="
+            pm2 status
+
+            echo "===== CURRENT COMMIT ====="
+            git log --oneline -5
