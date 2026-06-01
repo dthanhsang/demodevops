@@ -1,13 +1,7 @@
-version: "3.8"
-
 services:
-  web:
-    build:
-      context: .
-      dockerfile: Dockerfile
+  shopdemo:
+    build: .
+    container_name: shopdemo
+    restart: always
     ports:
-      - "8000:8000"
-    environment:
-      - CF_TUNNEL_TOKEN=${CF_TUNNEL_TOKEN}
-    restart: unless-stopped
-    # The container will run a Python HTTP server and expose it via Cloudflare Tunnel
+      - "3000:3000"
