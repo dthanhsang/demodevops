@@ -1,38 +1,14 @@
-name: Deploy
-
-on:
-  push:
-    branches:
-      - master
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Connect Tailscale
-        uses: tailscale/github-action@v2
-        with:
-          authkey: ${{ secrets.VPN_KETNOISSH }}
-
-      - name: Check Tailscale Status
-        run: |
-          echo "=== TAILSCALE STATUS ==="
-          tailscale status || true
-
-          echo "=== PING SERVER ==="
-          ping -c 4 100.93.83.43 || true
-
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: 100.93.83.43
           username: root
-          password: ${{ secrets.DEMOCIDI }}
+          key: ${{ secrets.Test }}
           port: 22
           timeout: 60s
           command_timeout: 10m
           debug: true
+
           script: |
             set -x
 
