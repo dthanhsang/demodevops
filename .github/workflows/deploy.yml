@@ -15,64 +15,47 @@ jobs:
         with:
           authkey: ${{ secrets.VPN_KETNOISSH }}
 
-      - name: Check Tailscale Status
+      - name: Check Tailscale
         run: |
-          echo "=== TAILSCALE STATUS ==="
-          tailscale status || true
+          tailscale status
+          ping -c 4 100.93.83.43
 
-          echo "=== PING SERVER ==="
-          ping -c 4 100.93.83.43 || true
+      - name: Setup SSH
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y sshpass
 
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: 100.93.83.43
-          username: root
-          password: ${{ secrets.DEMOCIDI }}
-          port: 22
-          timeout: 60s
-          command_timeout: 10m
-          debug: true
-          script: |
-            set -x
+      - name: Deploy
+        run: |
+          sshpass -p "${{ secrets.PASS }}" \
+          ssh \
+          -p 22 \
+          -o StrictHostKeyChecking=no \
+          -o PreferredAuthentications=password \
+          -o PubkeyAuthentication=no \
+          root@100.93.83.43 << 'EOF'
 
-            echo "===== START ====="
+          set -e
 
-            hostname
-            whoami
-            pwd
+          echo "===== START ====="
 
-            echo "===== NODE ====="
-            node -v
+          hostname
+          whoami
 
-            echo "===== NPM ====="
-            npm -v
+          cd /srv/shopdemo
 
-            echo "===== PM2 ====="
-            pm2 list
+          echo "===== GIT PULL ====="
+          git pull origin master
 
-            echo "===== PROJECT ====="
-            cd /srv/shopdemo
+          echo "===== NPM INSTALL ====="
+          npm install --production
 
-            pwd
-            ls -la
+          echo "===== PM2 RESTART ====="
+          pm2 restart shopdemo || pm2 start server.js --name shopdemo
 
-            echo "===== GIT STATUS ====="
-            git status
+          echo "===== PM2 SAVE ====="
+          pm2 save
 
-            echo "===== GIT REMOTE ====="
-            git remote -v
+          echo "===== DONE ====="
 
-            echo "===== GIT PULL ====="
-            git pull origin master
-
-            echo "===== NPM INSTALL ====="
-            npm install --production
-
-            echo "===== PM2 RESTART ====="
-            pm2 restart shopdemo || pm2 start server.js --name shopdemo
-
-            echo "===== PM2 SAVE ====="
-            pm2 save
-
-            echo "===== DONE ====="
+          EOF
