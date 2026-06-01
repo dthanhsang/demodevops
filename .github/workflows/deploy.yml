@@ -1,81 +1,78 @@
 name: Deploy
 
 on:
-push:
-branches:
-- master
+  push:
+    branches:
+      - master
 
 jobs:
-deploy:
-runs-on: ubuntu-latest
+  deploy:
+    runs-on: ubuntu-latest
 
-```
-steps:
-  - name: Connect Tailscale
-    uses: tailscale/github-action@v2
-    with:
-      authkey: ${{ secrets.VPN_KETNOISSH }}
+    steps:
+      - name: Connect Tailscale
+        uses: tailscale/github-action@v2
+        with:
+          authkey: ${{ secrets.VPN_KETNOISSH }}
 
-  - name: Check Tailscale Status
-    run: |
-      echo "=== TAILSCALE STATUS ==="
-      tailscale status || true
+      - name: Check Tailscale Status
+        run: |
+          echo "=== TAILSCALE STATUS ==="
+          tailscale status || true
 
-      echo "=== PING SERVER ==="
-      ping -c 4 100.93.83.43 || true
+          echo "=== PING SERVER ==="
+          ping -c 4 100.93.83.43 || true
 
-  - name: Deploy via SSH
-    uses: appleboy/ssh-action@v1.0.3
-    with:
-      host: 100.93.83.43
-      username: root
-      password: ${{ secrets.DEMOCIDI }}
-      port: 22
-      timeout: 60s
-      command_timeout: 10m
-      debug: true
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: 100.93.83.43
+          username: root
+          password: ${{ secrets.DEMOCIDI }}
+          port: 22
+          timeout: 60s
+          command_timeout: 10m
+          debug: true
+          script: |
+            set -x
 
-      script: |
-        set -x
+            echo "===== START ====="
 
-        echo "===== START ====="
+            hostname
+            whoami
+            pwd
 
-        hostname
-        whoami
-        pwd
+            echo "===== NODE ====="
+            node -v
 
-        echo "===== NODE ====="
-        node -v
+            echo "===== NPM ====="
+            npm -v
 
-        echo "===== NPM ====="
-        npm -v
+            echo "===== PM2 ====="
+            pm2 list
 
-        echo "===== PM2 ====="
-        pm2 list
+            echo "===== PROJECT ====="
+            cd /srv/shopdemo
 
-        echo "===== PROJECT ====="
-        cd /srv/shopdemo
+            pwd
+            ls -la
 
-        pwd
-        ls -la
+            echo "===== GIT STATUS ====="
+            git status
 
-        echo "===== GIT STATUS ====="
-        git status
+            echo "===== GIT REMOTE ====="
+            git remote -v
 
-        echo "===== GIT REMOTE ====="
-        git remote -v
+            echo "===== GIT PULL ====="
+            git pull origin master
 
-        echo "===== GIT PULL ====="
-        git pull origin master
+            echo "===== NPM INSTALL ====="
+            npm install --production
 
-        echo "===== NPM INSTALL ====="
-        npm install --production
+            echo "===== PM2 RESTART ====="
+            pm2 restart shopdemo || pm2 start server.js --name shopdemo
 
-        echo "===== PM2 RESTART ====="
-        pm2 restart shopdemo || pm2 start server.js --name shopdemo
+            echo "===== PM2 SAVE ====="
+            pm2 save
 
-        echo "===== PM2 SAVE ====="
-        pm2 save
-
-        echo "===== DONE ====="
-```
+            echo "===== DONE ====="
