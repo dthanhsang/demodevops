@@ -27,7 +27,7 @@ jobs:
 
       - name: Test SSH
         run: |
-          sshpass -p "${{ secrets.DEMOCIDI }}" \
+          sshpass -p "${{ secrets.PASS }}" \
           ssh \
           -p 22 \
           -o StrictHostKeyChecking=no \
