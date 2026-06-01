@@ -28,6 +28,10 @@ jobs:
       - name: Test SSH
         run: |
           sshpass -p "${{ secrets.DEMOCIDI }}" \
-          ssh -o StrictHostKeyChecking=no \
+          ssh \
+          -p 22 \
+          -o StrictHostKeyChecking=no \
+          -o PreferredAuthentications=password \
+          -o PubkeyAuthentication=no \
           root@100.93.83.43 \
           "hostname && whoami"
