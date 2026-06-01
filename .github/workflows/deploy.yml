@@ -25,7 +25,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y sshpass
 
-      - name: Test SSH
+      - name: Deploy
         run: |
           sshpass -p "${{ secrets.PASS }}" \
           ssh \
@@ -33,5 +33,29 @@ jobs:
           -o StrictHostKeyChecking=no \
           -o PreferredAuthentications=password \
           -o PubkeyAuthentication=no \
-          root@100.93.83.43 \
-          "hostname && whoami"
+          root@100.93.83.43 << 'EOF'
+
+          set -e
+
+          echo "===== START ====="
+
+          hostname
+          whoami
+
+          cd /srv/shopdemo
+
+          echo "===== GIT PULL ====="
+          git pull origin master
+
+          echo "===== NPM INSTALL ====="
+          npm install --production
+
+          echo "===== PM2 RESTART ====="
+          pm2 restart shopdemo || pm2 start server.js --name shopdemo
+
+          echo "===== PM2 SAVE ====="
+          pm2 save
+
+          echo "===== DONE ====="
+
+          EOF
