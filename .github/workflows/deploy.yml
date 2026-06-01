@@ -15,65 +15,24 @@ jobs:
         with:
           authkey: ${{ secrets.VPN_KETNOISSH }}
 
-      - name: Check Tailscale Status
+      - name: Check Tailscale
         run: |
-          echo "=== TAILSCALE STATUS ==="
-          tailscale status || true
+          tailscale status
+          ping -c 4 100.93.83.43
 
-          echo "=== PING SERVER ==="
-          ping -c 4 100.93.83.43 || true
-
-      - name: Deploy via SSH
+      - name: Test SSH Login
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: 100.93.83.43
           username: root
-          key: ${{ secrets.Test }}
+          password: ${{ secrets.DEMOCIDI }}
           port: 22
-          timeout: 60s
-          command_timeout: 10m
+          timeout: 30s
+          command_timeout: 2m
           debug: true
 
           script: |
-            set -x
-
-            echo "===== START ====="
-
+            echo "HELLO"
             hostname
             whoami
             pwd
-
-            echo "===== NODE ====="
-            node -v
-
-            echo "===== NPM ====="
-            npm -v
-
-            echo "===== PM2 ====="
-            pm2 list
-
-            echo "===== PROJECT ====="
-            cd /srv/shopdemo
-
-            pwd
-            ls -la
-
-            echo "===== GIT STATUS ====="
-            git status
-
-            echo "===== GIT REMOTE ====="
-            git remote -v
-
-            echo "===== GIT PULL ====="
-            git pull origin master
-
-            echo "===== NPM INSTALL ====="
-            npm install --production
-
-            echo "===== PM2 RESTART ====="
-            pm2 restart shopdemo || pm2 start server.js --name shopdemo
-
-            echo "===== PM2 SAVE ====="
-            pm2 save
-
-            echo "===== DONE ====="
