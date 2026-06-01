@@ -20,19 +20,14 @@ jobs:
           tailscale status
           ping -c 4 100.93.83.43
 
-      - name: Test SSH Login
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: 100.93.83.43
-          username: root
-          password: ${{ secrets.DEMOCIDI }}
-          port: 22
-          timeout: 30s
-          command_timeout: 2m
-          debug: true
+      - name: Setup SSH
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y sshpass
 
-          script: |
-            echo "HELLO"
-            hostname
-            whoami
-            pwd
+      - name: Test SSH
+        run: |
+          sshpass -p "${{ secrets.DEMOCIDI }}" \
+          ssh -o StrictHostKeyChecking=no \
+          root@100.93.83.43 \
+          "hostname && whoami"
