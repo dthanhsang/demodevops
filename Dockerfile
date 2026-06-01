@@ -1,5 +1,4 @@
-FROM node:20-alpine
-
+FROM node:20-slim
 WORKDIR /app
 
 ENV HOME=/root
