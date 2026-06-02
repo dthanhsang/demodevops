@@ -17,20 +17,7 @@
     <h2>Mô phỏng CI/CD với GitHub Actions</h2>
     <p>Hệ thống này sử dụng GitHub Actions để tự động xây dựng, kiểm thử và triển khai ứng dụng Node.js lên Docker.</p>
     <pre><code>
-// .github/workflows/ci.yml
-name: CI
-on: [push, pull_request]
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'
-      - run: npm install
-      - run: npm test
+
     </code></pre>
   </section>
 
