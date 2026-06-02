@@ -63,20 +63,18 @@ nav a:hover {
 .hero {
     text-align: center;
     padding: 100px 20px;
-    background: radial-gradient(circle at top, #1e293b 0%, #0f172a 100%);
+    background: var(--bg-dark);
 }
 
 .hero h1 {
     font-size: 3rem;
     margin-bottom: 20px;
-    background: linear-gradient(90deg, #4361ee, #4cc9f0);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: var(--text-main);
 }
 
 .hero p {
     font-size: 1.2rem;
-    color: var(--text-muted);
+    color: var(--text-main);
     max-width: 600px;
     margin: 0 auto 40px auto;
 }
@@ -145,8 +143,7 @@ nav a:hover {
     position: absolute;
     top: 15px;
     right: -35px;
-    background: var(--accent);
-    color: #fff;
+    background: var(--bg-dark);
     padding: 5px 40px;
     transform: rotate(45deg);
     font-size: 0.8rem;
