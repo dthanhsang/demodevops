@@ -1,6 +1,6 @@
 services:
   shopdemo:
-    build: .
+    image: dthanhsang2004/shopdemo:latest
     container_name: shopdemo
     restart: unless-stopped
     ports:

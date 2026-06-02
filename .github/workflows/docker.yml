@@ -1,0 +1,35 @@
+name: CI/CD Docker Build & Push
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Lấy source code
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      # 2. Login Docker Hub
+      - name: Login to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASS }}" | docker login -u "${{ secrets.DOCKER_USER }}" --password-stdin
+
+      # 3. Build Docker image (latest + version)
+      - name: Build Docker image
+        run: |
+          docker build \
+            -t ${{ secrets.DOCKER_USER }}/shopdemo:latest \
+            -t ${{ secrets.DOCKER_USER }}/shopdemo:${{ github.run_number }} \
+            .
+
+      # 4. Push latest image
+      - name: Push latest image
+        run: docker push ${{ secrets.DOCKER_USER }}/shopdemo:latest
+
+      # 5. Push versioned image
+      - name: Push versioned image
+        run: docker push ${{ secrets.DOCKER_USER }}/shopdemo:${{ github.run_number }}
