@@ -1,4 +1,4 @@
-name: Deploy
+name: Deploy CI/CD with Rollback
 
 on:
   push:
@@ -10,22 +10,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1. Connect Tailscale
       - name: Connect Tailscale
         uses: tailscale/github-action@v2
         with:
           authkey: ${{ secrets.VPN_KETNOISSH }}
 
+      # 2. Check connection
       - name: Check Tailscale
         run: |
           tailscale status
-          ping -c 4 100.93.83.43
+          ping -c 3 100.93.83.43
 
+      # 3. Setup SSH
       - name: Setup SSH
         run: |
           sudo apt-get update
           sudo apt-get install -y sshpass
 
-      - name: Deploy
+      # 4. Deploy + Rollback
+      - name: Deploy with Rollback
         run: |
           sshpass -p "${{ secrets.PASS }}" \
           ssh \
@@ -37,25 +41,43 @@ jobs:
 
           set -e
 
-          echo "===== START ====="
-
-          hostname
-          whoami
+          echo "===== START DEPLOY ====="
 
           cd /srv/shopdemo
 
-          echo "===== GIT PULL ====="
+          # lưu commit hiện tại để rollback
+          OLD_COMMIT=$(git rev-parse HEAD)
+
+          echo "===== PULL CODE ====="
           git pull origin master
 
-          echo "===== NPM INSTALL ====="
+          echo "===== INSTALL DEPENDENCIES ====="
           npm install --production
 
-          echo "===== PM2 RESTART ====="
+          echo "===== RESTART PM2 ====="
           pm2 restart shopdemo || pm2 start server.js --name shopdemo
 
-          echo "===== PM2 SAVE ====="
+          sleep 5
+
+          echo "===== HEALTH CHECK ====="
+          STATUS=$(curl -s http://localhost:3000/health || echo "fail")
+
+          echo "Health Response: $STATUS"
+
+          # ❌ FAIL → ROLLBACK
+          if [[ $STATUS != *"ok"* ]]; then
+            echo "❌ HEALTH FAILED → ROLLBACK TRIGGERED"
+
+            git reset --hard $OLD_COMMIT
+            npm install --production
+            pm2 restart shopdemo
+
+            echo "🔁 ROLLBACK COMPLETED"
+            exit 1
+          fi
+
           pm2 save
 
-          echo "===== DONE ====="
+          echo "===== DEPLOY SUCCESS ====="
 
           EOF
