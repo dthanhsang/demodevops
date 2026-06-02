@@ -1,10 +1,10 @@
 :root {
     --primary: #4361ee;
     --primary-hover: #3a0ca3;
-    --bg-dark: #0f172a;
-    --bg-card: #1e293b;
-    --text-main: #f8fafc;
-    --text-muted: #94a3b8;
+    --bg-dark: #ffffff;
+    --bg-card: #f8f9fa;
+    --text-main: #222222;
+    --text-muted: #555555;
     --accent: #f72585;
 }
 
@@ -26,12 +26,13 @@ header {
     justify-content: space-between;
     align-items: center;
     padding: 20px 5%;
-    background: rgba(15, 23, 42, 0.8);
+    background: rgba(255,255,255,0.8);
     backdrop-filter: blur(10px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     position: sticky;
     top: 0;
     z-index: 100;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(0,0,0,0.1);
 }
 
 .logo {

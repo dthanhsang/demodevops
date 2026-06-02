@@ -1,90 +1,41 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dịch vụ Mh, an toàn, chuyên nghiệp</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Đề tìa xậy dựng hệ thống CI/DI cho ứng dụng web</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <header class="header">
-    <div class="logo">MXH<span>VIP PRO MAX Siu cap pro mac ucajkfhsdjfhsajnd</span></div>
-    <nav class="nav">
-      <ul>
-        <li><a href="#features">Tính năng mới nhấ</a></li>
-        <li><a href="#pricing">Gói dịcandsaụ</a></li>
-        <li><a href="#contact">Liên hệaxckjsdnfsdkkfvadslk</a></li>
-      </ul>
-    </nav>
-  </header>
-
   <section class="hero">
-    <h1>Test docker </h1>
-    <p class="subtitle">Dịch vụ mạng xã hội toàn diện: quản lý nội dung, tương tác tự động, phân tích sâu và bảo mật tối ưu.</p>
-    <a href="#pricing" class="cta-button">Bắt đầu ngay</a>
+    <h1>Đề tìa xậy dựng hệ thống CI/DI cho ứng dụng web</h1>
+    <p class="subtitle">Mô phỏng CI/CD cho dự án Node.js sử dụng GitHub Actions.</p>
   </section>
 
-  <section id="features" class="features">
-    <div class="feature">
-      <h2>Tự động hoá nội dung</h2>
-      <p>Đăng bài, lên lịch, và phân phối nội dung trên đa nền tảng chỉ bằng một cú click.</p>
-    </div>
-    <div class="feature">
-      <h2>Phân tích chi tiết</h2>
-      <p>Biểu đồ, báo cáo thời gian thực, giúp bạn hiểu rõ hành vi người dùng.</p>
-    </div>
-    <div class="feature">
-      <h2>Bảo mật cao</h2>
-      <p>Quyền riêng tư, kiểm soát truy cập và bảo vệ dữ liệu người dùng.</p>
-    </div>
-  </section>
-
-  <section id="pricing" class="pricing">
-    <h2>Chọn gói dịch vụ phù hợp</h2>
-    <div class="pricing-grid">
-      <div class="plan-card">
-        <h3>Cơ bản</h3>
-        <div class="price">$9<span>/tháng</span></div>
-        <ul>
-          <li>Quản lý 1 tài khoản</li>
-          <li>Lên lịch 30 bài/tháng</li>
-          <li>Báo cáo cơ bản</li>
-        </ul>
-        <button class="buy-btn">Mua ngay</button>
-      </div>
-      <div class="plan-card featured">
-        <div class="badge">Phổ biến</div>
-        <h3>Chuyên nghiệp</h3>
-        <div class="price">$29<span>/tháng</span></div>
-        <ul>
-          <li>Quản lý tối đa 5 tài khoản</li>
-          <li>Lên lịch không giới hạn</li>
-          <li>Báo cáo nâng cao, AI đề xuất</li>
-          <li>Hỗ trợ 24/7</li>
-        </ul>
-        <button class="buy-btn">Mua ngay</button>
-      </div>
-      <div class="plan-card">
-        <h3>Doanh nghiệp</h3>
-        <div class="price">$79<span>/tháng</span></div>
-        <ul>
-          <li>Quản lý không giới hạn tài khoản</li>
-          <li>API tích hợp tùy chỉnh</li>
-          <li>Phân tích sâu, báo cáo đa chiều</li>
-          <li>Đào tạo & hỗ trợ chuyên dụng</li>
-        </ul>
-        <button class="buy-btn">Mua ngay</button>
-      </div>
-    </div>
-  </section>
-
-  <section id="contact" class="contact" style="padding:2rem; text-align:center;">
-    <h2>Liên hệ</h2>
-    <p>Email: <a href="mailto:support@mxhpro.vn">support@mxhpro.vn</a></p>
-    <p>Hotline: <a href="tel:+84212345678">+84 212 345 678</a></p>
+  <section id="ci-cd" class="ci-cd">
+    <h2>Mô phỏng CI/CD với GitHub Actions</h2>
+    <p>Hệ thống này sử dụng GitHub Actions để tự động xây dựng, kiểm thử và triển khai ứng dụng Node.js lên Docker.</p>
+    <pre><code>
+// .github/workflows/ci.yml
+name: CI
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+      - run: npm install
+      - run: npm test
+    </code></pre>
   </section>
 
   <footer>
-    <p>&copy; 20.</p>
+    <p>&amp;copy; 2026.</p>
   </footer>
+</body>
+</html>
