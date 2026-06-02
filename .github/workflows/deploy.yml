@@ -21,6 +21,11 @@ jobs:
         run: |
           tailscale status
           ping -c 3 100.93.83.43
+          #ci test
+      - name: CI Check (npm test)
+        run: |
+          npm install
+          npm test
 
       # 3. Setup SSH
       - name: Setup SSH
