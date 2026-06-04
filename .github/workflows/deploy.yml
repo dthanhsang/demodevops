@@ -10,35 +10,29 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout source code (🔥 FIX LỖI ENOENT)
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 2. Connect Tailscale
       - name: Connect Tailscale
         uses: tailscale/github-action@v2
         with:
           authkey: ${{ secrets.VPN_KETNOISSH }}
 
-      # 3. Check connection
       - name: Check Tailscale
         run: |
           tailscale status
           ping -c 3 100.93.83.43
 
-      # 4. CI STEP (npm test)
       - name: CI Check (npm test)
         run: |
           npm install
           npm test
 
-      # 5. Setup SSH
       - name: Setup SSH
         run: |
           sudo apt-get update
           sudo apt-get install -y sshpass
 
-      # 6. Deploy + Rollback
       - name: Deploy with Rollback
         run: |
           sshpass -p "${{ secrets.PASS }}" \
@@ -85,9 +79,6 @@ jobs:
             echo "🔁 ROLLBACK COMPLETED"
             exit 1
           fi
-
           pm2 save
-
           echo "===== DEPLOY SUCCESS ====="
-
           EOF
