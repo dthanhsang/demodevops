@@ -63,20 +63,6 @@ jobs:
 
 
           echo "Health Response: $STATUS"
-
-          #  FAIL → ROLLBACK
-          if [[ $STATUS != *"ok"* ]]; then
-            echo " HEALTH FAILED → ROLLBACK TRIGGERED"
-
-            git reset --hard $OLD_COMMIT
-            npm install --production
-            pm2 restart shopdemo
-
-            echo "ROLLBACK COMPLETED"
-            exit 1
-          fi
-          pm2 save
-          echo "===== DEPLOY SUCCESS ====="
           # Thông báo qua Telegram khi DEPLOY THÀNH CÔNG
           - name: Telegram Success
             if: success()
@@ -102,5 +88,19 @@ jobs:
               Commit: ${{ github.sha }}
               Actor: ${{ github.actor }}
               Workflow Run: ${{ github.run_number }}"
+          #  FAIL → ROLLBACK
+          if [[ $STATUS != *"ok"* ]]; then
+            echo " HEALTH FAILED → ROLLBACK TRIGGERED"
+
+            git reset --hard $OLD_COMMIT
+            npm install --production
+            pm2 restart shopdemo
+
+            echo "ROLLBACK COMPLETED"
+            exit 1
+          fi
+          pm2 save
+          echo "===== DEPLOY SUCCESS ====="
+
 
           EOF
