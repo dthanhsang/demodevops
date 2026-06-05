@@ -63,6 +63,88 @@ jobs:
 
 
           echo "Health Response: $STATUS"
+          
+          #  FAIL → ROLLBACK
+          if [[ $STATUS != *"ok"* ]]; then
+            echo " HEALTH FAILED → ROLLBACK TRIGGERED"
+
+            git reset --hard $OLD_COMMIT
+            npm install --production
+            pm2 restart shopdemo
+
+            echo "ROLLBACK COMPLETED"
+            exit 1
+          fi
+          pm2 save
+          echo "===== DEPLOY SUCCESS ====="
+         
+
+          EOF
+          name: Deploy CI/CD with Rollback
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Connect Tailscale
+        uses: tailscale/github-action@v2
+        with:
+          authkey: ${{ secrets.VPN_KETNOISSH }}
+
+      - name: Check Tailscale
+        run: |
+          tailscale status
+          ping -c 3 100.93.83.43
+
+      - name: CI Check (npm test)
+        run: |
+          npm install
+          npm test
+
+      - name: Deploy with Rollback
+        run: |
+          sshpass -p "${{ secrets.PASS }}" \
+          ssh \
+          -p 22 \
+          -o StrictHostKeyChecking=no \
+          -o PreferredAuthentications=password \
+          -o PubkeyAuthentication=no \
+          root@100.93.83.43 << 'EOF'
+
+          set -e
+
+
+
+          cd /srv/shopdemo
+
+          # lưu commit hiện tại để rollback
+          OLD_COMMIT=$(git rev-parse HEAD)
+
+
+          git pull origin master
+
+          echo "===== INSTALL DEPENDENCIES ====="
+          npm install --production
+
+          echo "===== RESTART PM2 ====="
+          pm2 restart shopdemo || pm2 start server.js --name shopdemo
+
+          sleep 5
+
+          echo "===== HEALTH CHECK ====="
+          STATUS=$(curl -s http://localhost:3000/health || echo "fail")
+
+
+          echo "Health Response: $STATUS"
           # Thông báo qua Telegram khi DEPLOY THÀNH CÔNG
           - name: Telegram Success
             if: success()
@@ -104,3 +186,4 @@ jobs:
 
 
           EOF
+
