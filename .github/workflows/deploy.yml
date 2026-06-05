@@ -45,14 +45,14 @@ jobs:
 
           set -e
 
-          echo "===== START DEPLOY ====="
+
 
           cd /srv/shopdemo
 
           # lưu commit hiện tại để rollback
           OLD_COMMIT=$(git rev-parse HEAD)
 
-          echo "===== PULL CODE ====="
+
           git pull origin master
 
           echo "===== INSTALL DEPENDENCIES ====="
@@ -65,18 +65,20 @@ jobs:
 
           echo "===== HEALTH CHECK ====="
           STATUS=$(curl -s http://localhost:3000/health || echo "fail")
+          STATUS=$(curl -s http://localhost:3001 || echo "fail")
+
 
           echo "Health Response: $STATUS"
 
-          # ❌ FAIL → ROLLBACK
+          #  FAIL → ROLLBACK
           if [[ $STATUS != *"ok"* ]]; then
-            echo "❌ HEALTH FAILED → ROLLBACK TRIGGERED"
+            echo " HEALTH FAILED → ROLLBACK TRIGGERED"
 
             git reset --hard $OLD_COMMIT
             npm install --production
             pm2 restart shopdemo
 
-            echo "🔁 ROLLBACK COMPLETED"
+            echo "ROLLBACK COMPLETED"
             exit 1
           fi
           pm2 save
