@@ -92,6 +92,7 @@ jobs:
             Commit: ${{ github.sha }}
             Actor: ${{ github.actor }}
             Workflow Run: ${{ github.run_number }}"
+            -d text="✅ Truy cập tại web https://demedevops.dothanhsang.id.vn để xem bản cập nhật mới nhất
 
         # Thông báo qua Telegram khi DEPLOY THẤT BẠI
       - name: Telegram Failure
