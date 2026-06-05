@@ -77,4 +77,30 @@ jobs:
           fi
           pm2 save
           echo "===== DEPLOY SUCCESS ====="
+          # Thông báo qua Telegram khi DEPLOY THÀNH CÔNG
+          - name: Telegram Success
+            if: success()
+            run: |
+              curl -s -X POST \
+              https://api.telegram.org/bot${{ secrets.TOKEN_BOT }}/sendMessage \
+              -d chat_id=${{ secrets.CHATID_BOT }} \
+              -d text="✅ Deploy thành công
+              Repository: ${{ github.repository }}
+              Commit: ${{ github.sha }}
+              Actor: ${{ github.actor }}
+              Workflow Run: ${{ github.run_number }}"
+
+          # Thông báo qua Telegram khi DEPLOY THẤT BẠI
+          - name: Telegram Failure
+            if: failure()
+            run: |
+              curl -s -X POST \
+              https://api.telegram.org/bot${{ secrets.TOKEN_BOT }}/sendMessage \
+              -d chat_id=${{ secrets.CHATID_BOT }} \
+              -d text="❌ Deploy thất bại
+              Repository: ${{ github.repository }}
+              Commit: ${{ github.sha }}
+              Actor: ${{ github.actor }}
+              Workflow Run: ${{ github.run_number }}"
+
           EOF
