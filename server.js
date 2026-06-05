@@ -6,11 +6,17 @@ const port = 3000;
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Health check route
+//app.get("/health", (req, res) => {
+  //res.status(200).json({
+    //status: "ok",
+    //time: new Date()
+ // });
+//});
 app.get("/health", (req, res) => {
-  res.json({
-    status: "fail"
+  res.status(200).json({
+   status: "rollback-test"
   });
-});
+});//
 
 app.listen(port, () => {
   console.log(`VPS Shop app listening at http://localhost:${port}`);
