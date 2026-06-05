@@ -7,9 +7,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Health check route
 app.get("/health", (req, res) => {
-  res.status(200).json({
-    status: "ok",
-    time: new Date()
+  res.json({
+    status: "fail"
   });
 });
 
